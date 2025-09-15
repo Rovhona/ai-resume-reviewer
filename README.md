@@ -1,12 +1,14 @@
 # AI Resume Reviewer
 
-A full-stack web application that analyzes resumes and provides AI-powered feedback, scoring, and keyword analysis to help job seekers improve their resumes.
+A universal full-stack web application that analyzes resumes from any field and provides AI-powered feedback, scoring, and keyword analysis to help job seekers improve their resumes. Works for all industries - from marketing and business to technology and healthcare.
 
 ## 🚀 Features
 
 - **PDF & DOCX Support**: Upload resumes in PDF or DOCX format
 - **AI-Powered Analysis**: Intelligent scoring based on multiple criteria
-- **Keyword Detection**: Identifies relevant technical keywords
+- **Universal Keyword Detection**: Identifies relevant keywords for any field
+- **Field-Agnostic**: Works for all industries (Marketing, Business, Technology, Healthcare, Education, etc.)
+- **Smart Categorization**: Organizes keywords into General, Technical, and Business skills
 - **Comprehensive Feedback**: Provides actionable suggestions for improvement
 - **Real-time Processing**: Fast analysis with immediate results
 - **Modern UI**: Clean, responsive interface built with React
@@ -15,10 +17,13 @@ A full-stack web application that analyzes resumes and provides AI-powered feedb
 
 The AI Resume Reviewer evaluates resumes based on:
 
-- **Completeness**: Checks for essential sections (Education, Experience, Skills)
-- **Keyword Matching**: Identifies relevant technical keywords
+- **Completeness**: Checks for essential sections (Education, Experience, Skills, Projects, Certifications)
+- **Smart Keyword Detection**: Identifies relevant keywords across three categories:
+  - **General Skills**: Leadership, Management, Communication, Problem Solving, Teamwork
+  - **Technical Skills**: Python, JavaScript, SQL, API, Database (for tech roles)
+  - **Business Skills**: Budget, Strategy, ROI, Marketing, Sales (for business roles)
 - **Length Optimization**: Ensures resume is between 400-800 words
-- **Overall Score**: Provides a score out of 100
+- **Overall Score**: Provides a score out of 100 with detailed breakdown
 
 ## 🛠️ Tech Stack
 
@@ -115,9 +120,22 @@ ai-resume-reviewer/
 - **Response**: 
   ```json
   {
-    "score": 80.0,
+    "score": 86.7,
     "feedback": "Adjust resume length to be between 400-800 words",
-    "keywords": ["Python", "Machine Learning", "SQL", "JavaScript"]
+    "keywords": ["Leadership", "Management", "Communication", "Problem Solving", "Marketing"],
+    "keyword_categories": {
+      "generic": ["Leadership", "Management", "Communication", "Problem Solving"],
+      "technical": [],
+      "business": ["Marketing", "Sales", "Strategy"]
+    },
+    "detailed_scores": {
+      "completeness": 100.0,
+      "keyword_score": 80.0,
+      "length_score": 80.0
+    },
+    "word_count": 450,
+    "keywords_found": 5,
+    "total_keywords": 43
   }
   ```
 
@@ -223,13 +241,26 @@ If you encounter any issues or have questions, please:
 
 When analyzing a resume, you might see results like:
 
+### Marketing Manager Resume:
 ```
-Score: 80.0/100
+Overall Score: 86.7/100
 Feedback: "Adjust resume length to be between 400-800 words"
-Keywords Found: Python, Machine Learning, SQL, JavaScript
+
+Detailed Breakdown:
+- Completeness: 100%
+- Keyword Match: 80%
+- Length Score: 80%
+
+Keywords by Category:
+- General Skills: Leadership, Management, Communication, Problem Solving
+- Business Skills: Marketing, Sales, Strategy, Budget
+- Technical Skills: (none found)
+
+Word Count: 450
+Keywords Found: 8/43
 ```
 
-This indicates a strong resume with good technical keywords but could benefit from length optimization.
+This indicates a strong resume with excellent general and business skills, but could benefit from length optimization.
 
 ---
 
