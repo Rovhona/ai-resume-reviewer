@@ -47,7 +47,8 @@ function App() {
 
     try {
       // Send file to FastAPI backend
-      const response = await fetch("http://127.0.0.1:8000/analyze/", {
+      const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
+      const response = await fetch(`${apiUrl}/analyze/`, {
         method: "POST",
         body: formData,
       });

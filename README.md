@@ -205,6 +205,20 @@ with open('../frontend/src/resume/sample.pdf', 'rb') as f:
 - **"Unsupported file type"**: Upload only PDF or DOCX files
 - **"Could not extract text"**: File may be corrupted or password-protected
 
+## 🚀 Deployment
+
+### Quick Deploy to Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Rovhona/ai-resume-reviewer)
+
+### Manual Deployment
+
+1. **Deploy Backend**: Use Heroku, Railway, or Render (see [DEPLOYMENT.md](DEPLOYMENT.md))
+2. **Deploy Frontend**: Connect your GitHub repo to Vercel
+3. **Set Environment Variables**: Add your backend URL to Vercel
+
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
 ## 🔮 Future Enhancements
 
 - [ ] Support for additional file formats (TXT, RTF)
