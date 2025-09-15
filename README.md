@@ -215,9 +215,7 @@ with open('../frontend/src/resume/sample.pdf', 'rb') as f:
 - [ ] Integration with job boards
 - [ ] ATS (Applicant Tracking System) compatibility scoring
 
-## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
 
 ## 🤝 Contributing
 
