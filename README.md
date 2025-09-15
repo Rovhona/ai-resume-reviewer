@@ -1,6 +1,6 @@
 # AI Resume Reviewer
 
-A universal full-stack web application that analyzes resumes from any field and provides AI-powered feedback, scoring, and keyword analysis to help job seekers improve their resumes. Works for all industries - from marketing and business to technology and healthcare.
+Full-stack web application that analyzes resumes  provides AI-powered feedback, scoring, and keyword analysis to help job seekers improve their resumes. Works for all industries.
 
 ## 🚀 Features
 
