@@ -135,7 +135,19 @@ ai-resume-reviewer/
 
 ## 🧪 Testing
 
+### Automated Setup
+```bash
+# Run the development setup script
+python setup_dev.py
+```
+
 ### Backend Testing
+```bash
+cd backend
+python test_resume_scorer.py
+```
+
+### API Testing
 ```bash
 cd backend
 python -c "
