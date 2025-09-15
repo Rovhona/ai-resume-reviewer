@@ -8,13 +8,8 @@ app = FastAPI()   # <-- uvicorn looks for this variable
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000", 
-        "http://127.0.0.1:3000",
-        "https://*.vercel.app",  # Allow all Vercel deployments
-        "https://ai-resume-reviewer.vercel.app"  # Your specific Vercel domain
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],  # Allow all origins for now
+    allow_credentials=False,  # Must be False when allow_origins=["*"]
     allow_methods=["*"],
     allow_headers=["*"],
 )
