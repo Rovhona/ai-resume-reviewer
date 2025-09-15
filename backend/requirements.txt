@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pdfplumber
+python-docx
+spacy
+language-tool-python
+scikit-learn
+reportlab
