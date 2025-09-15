@@ -1,11 +1,34 @@
 import React, { useState } from "react";
+import "./App.css";
 
 function App() {
   const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    setIsDragOver(false);
+    const droppedFile = event.dataTransfer.files[0];
+    if (droppedFile && (droppedFile.type === "application/pdf" || 
+        droppedFile.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+        droppedFile.type === "application/msword")) {
+      setFile(droppedFile);
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -49,97 +72,208 @@ function App() {
     }
   };
 
+  const getScoreColor = (score) => {
+    if (score >= 80) return "#10b981"; // green
+    if (score >= 60) return "#f59e0b"; // yellow
+    return "#ef4444"; // red
+  };
+
+  const getScoreEmoji = (score) => {
+    if (score >= 80) return "🎉";
+    if (score >= 60) return "👍";
+    return "📈";
+  };
+
   return (
-    <div style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto" }}>
-      <h2 style={{ textAlign: "center", marginBottom: "2rem" }}>AI Resume Reviewer</h2>
-      <form onSubmit={handleSubmit} style={{ textAlign: "center" }}>
-        <div style={{ marginBottom: "1rem" }}>
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx"
-            onChange={handleFileChange}
-            style={{ marginBottom: "1rem" }}
-          />
-        </div>
-        <button 
-          type="submit" 
-          style={{ 
-            padding: "10px 20px", 
-            backgroundColor: "#007bff", 
-            color: "white", 
-            border: "none", 
-            borderRadius: "5px", 
-            cursor: "pointer",
-            fontSize: "16px"
-          }}
-          disabled={!file}
-        >
-          {result && result.loading ? "Analyzing..." : "Analyze Resume"}
-        </button>
-      </form>
+    <div className="app">
+      <div className="container">
+        <header className="header">
+          <h1 className="title">
+            <span className="title-icon">📄</span>
+            AI Resume Reviewer
+          </h1>
+          <p className="subtitle">Get instant feedback on your resume from any field</p>
+        </header>
 
-      {file && (
-        <p style={{ marginTop: "1rem" }}>
-          Selected File: <strong>{file.name}</strong>
-        </p>
-      )}
-
-      {result && (
-        <div style={{ marginTop: "2rem" }}>
-          {result.loading ? (
-            <div>
-              <h3>Analyzing Resume...</h3>
-              <p>Please wait while we analyze your resume...</p>
-            </div>
-          ) : result.error ? (
-            <div style={{ color: "red" }}>
-              <h3>Error</h3>
-              <p>{result.error}</p>
-            </div>
-          ) : (
-            <div>
-              <h3>Resume Analysis</h3>
-              <div style={{ marginBottom: "1rem" }}>
-                <p><strong>Overall Score:</strong> {result.score}/100</p>
-                <p><strong>Feedback:</strong> {result.feedback}</p>
+        <div className="upload-section">
+          <form onSubmit={handleSubmit} className="upload-form">
+            <div 
+              className={`file-drop-zone ${isDragOver ? 'drag-over' : ''} ${file ? 'has-file' : ''}`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <div className="drop-zone-content">
+                <div className="upload-icon">📁</div>
+                {file ? (
+                  <div className="file-selected">
+                    <p className="file-name">{file.name}</p>
+                    <p className="file-size">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="drop-text">Drag & drop your resume here</p>
+                    <p className="drop-subtext">or click to browse</p>
+                  </div>
+                )}
               </div>
-              
-              {result.detailed_scores && (
-                <div style={{ marginBottom: "1rem", padding: "1rem", backgroundColor: "#f8f9fa", borderRadius: "5px" }}>
-                  <h4>Detailed Breakdown:</h4>
-                  <p><strong>Completeness:</strong> {result.detailed_scores.completeness}%</p>
-                  <p><strong>Keyword Match:</strong> {result.detailed_scores.keyword_score}%</p>
-                  <p><strong>Length Score:</strong> {result.detailed_scores.length_score}%</p>
-                </div>
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={handleFileChange}
+                className="file-input"
+                id="file-input"
+              />
+              <label htmlFor="file-input" className="file-label">
+                Choose File
+              </label>
+            </div>
+            
+            <button 
+              type="submit" 
+              className={`analyze-btn ${!file ? 'disabled' : ''}`}
+              disabled={!file}
+            >
+              {result && result.loading ? (
+                <>
+                  <span className="spinner"></span>
+                  Analyzing...
+                </>
+              ) : (
+                <>
+                  <span>🔍</span>
+                  Analyze Resume
+                </>
               )}
-              
-              <div style={{ marginBottom: "1rem" }}>
-                <p><strong>Word Count:</strong> {result.word_count || "N/A"}</p>
-                <p><strong>Keywords Found:</strong> {result.keywords_found || result.keywords.length}/{result.total_keywords || "N/A"}</p>
+            </button>
+          </form>
+        </div>
+
+        {result && (
+          <div className="results-section">
+            {result.loading ? (
+              <div className="loading-card">
+                <div className="loading-spinner"></div>
+                <h3>Analyzing Your Resume...</h3>
+                <p>Please wait while we analyze your resume and provide feedback.</p>
+              </div>
+            ) : result.error ? (
+              <div className="error-card">
+                <div className="error-icon">❌</div>
+                <h3>Analysis Failed</h3>
+                <p>{result.error}</p>
+              </div>
+            ) : (
+              <div className="results-card">
+                <div className="score-header">
+                  <div className="score-circle" style={{ borderColor: getScoreColor(result.score) }}>
+                    <span className="score-number" style={{ color: getScoreColor(result.score) }}>
+                      {result.score}
+                    </span>
+                    <span className="score-total">/100</span>
+                  </div>
+                  <div className="score-info">
+                    <h2>Resume Score</h2>
+                    <p className="score-emoji">{getScoreEmoji(result.score)}</p>
+                  </div>
+                </div>
+
+                <div className="feedback-section">
+                  <h3>📝 Feedback</h3>
+                  <p className="feedback-text">{result.feedback}</p>
+                </div>
                 
-                {result.keyword_categories && (
-                  <div style={{ marginTop: "1rem" }}>
-                    <h4>Keywords by Category:</h4>
-                    {result.keyword_categories.generic && result.keyword_categories.generic.length > 0 && (
-                      <p><strong>General Skills:</strong> {result.keyword_categories.generic.join(", ")}</p>
-                    )}
-                    {result.keyword_categories.technical && result.keyword_categories.technical.length > 0 && (
-                      <p><strong>Technical Skills:</strong> {result.keyword_categories.technical.join(", ")}</p>
-                    )}
-                    {result.keyword_categories.business && result.keyword_categories.business.length > 0 && (
-                      <p><strong>Business Skills:</strong> {result.keyword_categories.business.join(", ")}</p>
-                    )}
+                {result.detailed_scores && (
+                  <div className="breakdown-section">
+                    <h3>📊 Detailed Breakdown</h3>
+                    <div className="breakdown-grid">
+                      <div className="breakdown-item">
+                        <span className="breakdown-label">Completeness</span>
+                        <div className="progress-bar">
+                          <div 
+                            className="progress-fill" 
+                            style={{ width: `${result.detailed_scores.completeness}%` }}
+                          ></div>
+                        </div>
+                        <span className="breakdown-score">{result.detailed_scores.completeness}%</span>
+                      </div>
+                      <div className="breakdown-item">
+                        <span className="breakdown-label">Keyword Match</span>
+                        <div className="progress-bar">
+                          <div 
+                            className="progress-fill" 
+                            style={{ width: `${result.detailed_scores.keyword_score}%` }}
+                          ></div>
+                        </div>
+                        <span className="breakdown-score">{result.detailed_scores.keyword_score}%</span>
+                      </div>
+                      <div className="breakdown-item">
+                        <span className="breakdown-label">Length Score</span>
+                        <div className="progress-bar">
+                          <div 
+                            className="progress-fill" 
+                            style={{ width: `${result.detailed_scores.length_score}%` }}
+                          ></div>
+                        </div>
+                        <span className="breakdown-score">{result.detailed_scores.length_score}%</span>
+                      </div>
+                    </div>
                   </div>
                 )}
                 
-                {!result.keyword_categories && (
-                  <p><strong>Keywords:</strong> {result.keywords.join(", ")}</p>
+                <div className="stats-section">
+                  <div className="stat-item">
+                    <span className="stat-label">Word Count</span>
+                    <span className="stat-value">{result.word_count || "N/A"}</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">Keywords Found</span>
+                    <span className="stat-value">{result.keywords_found || result.keywords.length}/{result.total_keywords || "N/A"}</span>
+                  </div>
+                </div>
+                
+                {result.keyword_categories && (
+                  <div className="keywords-section">
+                    <h3>🏷️ Keywords by Category</h3>
+                    <div className="keyword-categories">
+                      {result.keyword_categories.generic && result.keyword_categories.generic.length > 0 && (
+                        <div className="keyword-category">
+                          <h4 className="category-title general">General Skills</h4>
+                          <div className="keyword-tags">
+                            {result.keyword_categories.generic.map((keyword, index) => (
+                              <span key={index} className="keyword-tag general">{keyword}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {result.keyword_categories.technical && result.keyword_categories.technical.length > 0 && (
+                        <div className="keyword-category">
+                          <h4 className="category-title technical">Technical Skills</h4>
+                          <div className="keyword-tags">
+                            {result.keyword_categories.technical.map((keyword, index) => (
+                              <span key={index} className="keyword-tag technical">{keyword}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {result.keyword_categories.business && result.keyword_categories.business.length > 0 && (
+                        <div className="keyword-category">
+                          <h4 className="category-title business">Business Skills</h4>
+                          <div className="keyword-tags">
+                            {result.keyword_categories.business.map((keyword, index) => (
+                              <span key={index} className="keyword-tag business">{keyword}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 )}
               </div>
-            </div>
-          )}
-        </div>
-      )}
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
