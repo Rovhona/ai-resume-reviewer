@@ -6,3 +6,4 @@ spacy
 language-tool-python
 scikit-learn
 reportlab
+python-multipart

@@ -7,32 +7,34 @@ from resume_scorer import score_resume
 def test_resume_scorer():
     """Test the resume scoring functionality"""
     
-    # Sample resume text
+    # Sample resume text (more generic)
     sample_text = """
     John Doe
-    Software Engineer
+    Marketing Manager
     
     Experience:
-    - 3 years of Python development
-    - Machine Learning projects
-    - SQL database management
-    - React frontend development
+    - 5 years of marketing leadership
+    - Project management and team collaboration
+    - Customer service excellence
+    - Strategic planning and analysis
     
     Skills:
-    - Python, JavaScript, SQL
-    - React, FastAPI
-    - Git, Docker
-    - AWS, Linux
+    - Leadership, Communication, Problem Solving
+    - Marketing, Sales, Customer Service
+    - Budget management, ROI analysis
+    - Creative thinking and innovation
     
     Education:
-    - Bachelor's in Computer Science
+    - Bachelor's in Business Administration
     
     Projects:
-    - Built a resume analyzer using FastAPI
-    - Machine Learning model for data analysis
+    - Led successful marketing campaigns
+    - Improved customer satisfaction metrics
+    - Developed training programs for team
     
     Certifications:
-    - AWS Certified Developer
+    - Project Management Professional (PMP)
+    - Digital Marketing Certification
     """
     
     # Test the scoring
@@ -44,6 +46,12 @@ def test_resume_scorer():
     print(f"Keywords Found: {result['keywords']}")
     print(f"Word Count: {result['word_count']}")
     print(f"Detailed Scores: {result['detailed_scores']}")
+    
+    if 'keyword_categories' in result:
+        print("\nKeyword Categories:")
+        for category, keywords in result['keyword_categories'].items():
+            if keywords:
+                print(f"  {category.title()}: {', '.join(keywords)}")
     
     # Assertions
     assert result['score'] > 0, "Score should be positive"

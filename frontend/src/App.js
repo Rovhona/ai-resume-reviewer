@@ -116,7 +116,25 @@ function App() {
               <div style={{ marginBottom: "1rem" }}>
                 <p><strong>Word Count:</strong> {result.word_count || "N/A"}</p>
                 <p><strong>Keywords Found:</strong> {result.keywords_found || result.keywords.length}/{result.total_keywords || "N/A"}</p>
-                <p><strong>Keywords:</strong> {result.keywords.join(", ")}</p>
+                
+                {result.keyword_categories && (
+                  <div style={{ marginTop: "1rem" }}>
+                    <h4>Keywords by Category:</h4>
+                    {result.keyword_categories.generic && result.keyword_categories.generic.length > 0 && (
+                      <p><strong>General Skills:</strong> {result.keyword_categories.generic.join(", ")}</p>
+                    )}
+                    {result.keyword_categories.technical && result.keyword_categories.technical.length > 0 && (
+                      <p><strong>Technical Skills:</strong> {result.keyword_categories.technical.join(", ")}</p>
+                    )}
+                    {result.keyword_categories.business && result.keyword_categories.business.length > 0 && (
+                      <p><strong>Business Skills:</strong> {result.keyword_categories.business.join(", ")}</p>
+                    )}
+                  </div>
+                )}
+                
+                {!result.keyword_categories && (
+                  <p><strong>Keywords:</strong> {result.keywords.join(", ")}</p>
+                )}
               </div>
             </div>
           )}

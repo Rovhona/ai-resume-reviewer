@@ -27,10 +27,22 @@ def score_resume(text):
     sections = ["Education", "Experience", "Skills", "Projects", "Certifications"]
     scores["completeness"] = sum(1 for s in sections if s.lower() in text.lower()) / len(sections) * 100
 
-    # Keyword match
-    found = [kw for kw in KEYWORDS if re.search(rf"\b{kw}\b", text, re.IGNORECASE)]
-    scores["keywords_matched"] = len(found)
-    scores["keyword_score"] = len(found) / len(KEYWORDS) * 100
+    # Smart keyword detection - use all keyword categories
+    all_keywords = GENERIC_KEYWORDS + TECH_KEYWORDS + BUSINESS_KEYWORDS
+    found_keywords = []
+    
+    # Find keywords from all categories
+    for keyword in all_keywords:
+        if re.search(rf"\b{re.escape(keyword)}\b", text, re.IGNORECASE):
+            found_keywords.append(keyword)
+    
+    # Categorize found keywords
+    generic_found = [kw for kw in found_keywords if kw in GENERIC_KEYWORDS]
+    tech_found = [kw for kw in found_keywords if kw in TECH_KEYWORDS]
+    business_found = [kw for kw in found_keywords if kw in BUSINESS_KEYWORDS]
+    
+    scores["keywords_matched"] = len(found_keywords)
+    scores["keyword_score"] = min(100, (len(found_keywords) / 10) * 100)  # Scale based on 10 keywords = 100%
 
     # Length check
     word_count = len(text.split())
@@ -54,13 +66,18 @@ def score_resume(text):
     return {
         "score": round(overall_score, 1),
         "feedback": feedback,
-        "keywords": found,
+        "keywords": found_keywords,
+        "keyword_categories": {
+            "generic": generic_found,
+            "technical": tech_found,
+            "business": business_found
+        },
         "detailed_scores": {
             "completeness": round(scores["completeness"], 1),
             "keyword_score": round(scores["keyword_score"], 1),
             "length_score": round(scores["length_score"], 1)
         },
         "word_count": scores["word_count"],
-        "keywords_found": len(found),
-        "total_keywords": len(KEYWORDS)
+        "keywords_found": len(found_keywords),
+        "total_keywords": len(all_keywords)
     }
