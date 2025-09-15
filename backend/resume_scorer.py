@@ -1,6 +1,24 @@
 import re
 
-KEYWORDS = ["Python", "Machine Learning", "SQL", "React", "JavaScript", "FastAPI", "Node.js", "Git", "Docker", "AWS", "Azure", "Linux", "API", "Database", "Frontend", "Backend"]
+# Generic keywords that apply to most professional fields
+GENERIC_KEYWORDS = [
+    "Leadership", "Management", "Communication", "Problem Solving", "Teamwork",
+    "Project Management", "Analytical", "Creative", "Innovative", "Strategic",
+    "Customer Service", "Sales", "Marketing", "Finance", "Operations",
+    "Research", "Development", "Training", "Mentoring", "Collaboration"
+]
+
+# Technical keywords (optional - can be used for tech roles)
+TECH_KEYWORDS = [
+    "Python", "JavaScript", "SQL", "React", "Machine Learning", "Data Analysis",
+    "Git", "API", "Database", "Cloud", "Automation", "Software Development"
+]
+
+# Business keywords
+BUSINESS_KEYWORDS = [
+    "Budget", "Revenue", "Growth", "Strategy", "Planning", "Analysis",
+    "ROI", "KPI", "Metrics", "Process Improvement", "Quality Assurance"
+]
 
 def score_resume(text):
     scores = {}
