@@ -99,9 +99,25 @@ function App() {
           ) : (
             <div>
               <h3>Resume Analysis</h3>
-              <p><strong>Score:</strong> {result.score}/100</p>
-              <p><strong>Feedback:</strong> {result.feedback}</p>
-              <p><strong>Keywords Found:</strong> {result.keywords.join(", ")}</p>
+              <div style={{ marginBottom: "1rem" }}>
+                <p><strong>Overall Score:</strong> {result.score}/100</p>
+                <p><strong>Feedback:</strong> {result.feedback}</p>
+              </div>
+              
+              {result.detailed_scores && (
+                <div style={{ marginBottom: "1rem", padding: "1rem", backgroundColor: "#f8f9fa", borderRadius: "5px" }}>
+                  <h4>Detailed Breakdown:</h4>
+                  <p><strong>Completeness:</strong> {result.detailed_scores.completeness}%</p>
+                  <p><strong>Keyword Match:</strong> {result.detailed_scores.keyword_score}%</p>
+                  <p><strong>Length Score:</strong> {result.detailed_scores.length_score}%</p>
+                </div>
+              )}
+              
+              <div style={{ marginBottom: "1rem" }}>
+                <p><strong>Word Count:</strong> {result.word_count || "N/A"}</p>
+                <p><strong>Keywords Found:</strong> {result.keywords_found || result.keywords.length}/{result.total_keywords || "N/A"}</p>
+                <p><strong>Keywords:</strong> {result.keywords.join(", ")}</p>
+              </div>
             </div>
           )}
         </div>

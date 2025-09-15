@@ -1,12 +1,12 @@
 import re
 
-KEYWORDS = ["Python", "Machine Learning", "SQL", "React", "JavaScript"]
+KEYWORDS = ["Python", "Machine Learning", "SQL", "React", "JavaScript", "FastAPI", "Node.js", "Git", "Docker", "AWS", "Azure", "Linux", "API", "Database", "Frontend", "Backend"]
 
 def score_resume(text):
     scores = {}
 
     # Check for sections
-    sections = ["Education", "Experience", "Skills"]
+    sections = ["Education", "Experience", "Skills", "Projects", "Certifications"]
     scores["completeness"] = sum(1 for s in sections if s.lower() in text.lower()) / len(sections) * 100
 
     # Keyword match
@@ -36,5 +36,13 @@ def score_resume(text):
     return {
         "score": round(overall_score, 1),
         "feedback": feedback,
-        "keywords": found
+        "keywords": found,
+        "detailed_scores": {
+            "completeness": round(scores["completeness"], 1),
+            "keyword_score": round(scores["keyword_score"], 1),
+            "length_score": round(scores["length_score"], 1)
+        },
+        "word_count": scores["word_count"],
+        "keywords_found": len(found),
+        "total_keywords": len(KEYWORDS)
     }
